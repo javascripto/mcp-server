@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { TodoModule } from './todo/todo.module';
 
 @Module({
-  imports: [],
+  imports: [TodoModule, ConfigModule.forRoot()],
   controllers: [AppController],
   providers: [AppService],
 })
