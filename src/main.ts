@@ -30,6 +30,9 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, documentFactory);
 
   const configService = app.get(ConfigService);
-  await app.listen(configService.getOrThrow<number>('SERVER_PORT'));
+  const port = configService.get<number>('SERVER_PORT') || 3000;
+  if (process.env.NODE_ENV !== 'production') await app.listen(port);
+  return app.getHttpAdapter().getInstance();
 }
-bootstrap();
+
+export default bootstrap();
