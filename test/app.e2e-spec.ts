@@ -17,12 +17,12 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET) - Redirect to /api', () => {
+  it('/ (GET) - Redirect to /api/health', () => {
     return request(app.getHttpServer())
       .get('/')
       .expect(HttpStatus.PERMANENT_REDIRECT)
       .expect(res => {
-        expect(res.headers.location).toBe('/api');
+        expect(res.headers.location).toBe('/api/health');
       });
   });
 

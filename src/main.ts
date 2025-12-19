@@ -3,13 +3,15 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.enableCors();
   const mcpServerRoutes = ['sse', 'mcp', 'messages'];
-  app.setGlobalPrefix('api', { exclude: ['', 'hello', ...mcpServerRoutes] });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.enableCors();
   app.disable('x-powered-by');
+  app.setGlobalPrefix('api', { exclude: ['', 'hello', ...mcpServerRoutes] });
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -17,6 +19,16 @@ async function bootstrap() {
       forbidNonWhitelisted: false,
     }),
   );
+  const openAPIConfig = new DocumentBuilder()
+    .setTitle('MCP TODO API')
+    .setDescription('The MCP TODO API description')
+    .setVersion('1.0')
+    .addTag('todo')
+    .build();
+  const documentFactory = () =>
+    SwaggerModule.createDocument(app, openAPIConfig);
+  SwaggerModule.setup('api/docs', app, documentFactory);
+
   const configService = app.get(ConfigService);
   await app.listen(configService.getOrThrow<number>('SERVER_PORT'));
 }
