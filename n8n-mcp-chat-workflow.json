@@ -1,0 +1,176 @@
+{
+  "name": "TODO MCP Chat Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "endpointUrl": "http://host.docker.internal:3000/sse",
+        "serverTransport": "sse",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        -624,
+        400
+      ],
+      "id": "1c735934-67c0-4082-b2fd-0ebcd0bffece",
+      "name": "TODO MCP"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -1232,
+        176
+      ],
+      "id": "ebc130b6-19e8-4986-95a6-221aee29352c",
+      "name": "Quando receber mensagem",
+      "webhookId": "30becacd-08bb-4364-bbfc-65e8d2d26d1e"
+    },
+    {
+      "parameters": {
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "Você é um assistente pessoal que ajuda a gerenciar tarefas (TODOs). Use a ferramenta 'TODO MCP' para criar, listar, atualizar ou deletar tarefas sempre que solicitado.\nNa primeira mensagem você já deve listar todas as tarefas e mostrá-las caso existam.\nUse emoji de check verde para tarefas concluídas e x vermelho para não concluídas.\nCada linha deve começar com emoji e as tarefas devem ser listadas como lista não ordenada."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -896,
+        176
+      ],
+      "id": "d0a8ee8b-c3fa-46fb-bf78-6a2cdc1605b1",
+      "name": "Agente de IA",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        400
+      ],
+      "id": "cabb6fbf-5ebe-4d64-9e13-cc84debbd66b",
+      "name": "Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "UvHRQyOKm8rcVu0j",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -752,
+        400
+      ],
+      "id": "f92ebbf9-ddba-43f1-b572-b46b9f61ce84",
+      "name": "Memória"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -1008,
+        400
+      ],
+      "id": "02d01bbf-87cf-4dc1-8060-320bb0440498",
+      "name": "ChatGPT",
+      "credentials": {
+        "openAiApi": {
+          "id": "plrF4WpPUEWHCYgV",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "TODO MCP": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente de IA",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quando receber mensagem": {
+      "main": [
+        [
+          {
+            "node": "Agente de IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente de IA",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Memória": {
+      "ai_memory": [
+        [
+          {
+            "node": "Agente de IA",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ChatGPT": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente de IA",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "91067a02-eb78-4dd9-93a1-8423145be72c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "775ce4b4c9dda6d88ec0b30e1dde161f97ef045274da5e6c6ac92253fc40ef61"
+  },
+  "id": "CBDTiaA1QaX7dYV1",
+  "tags": []
+}

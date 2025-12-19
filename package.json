@@ -20,7 +20,9 @@
     "lint": "biome lint --write",
     "format": "biome format --write",
     "biome:check": "biome check --write",
-    "inspector": "npx @modelcontextprotocol/inspector http://localhost:3000/sse"
+    "inspector": "npx @modelcontextprotocol/inspector http://localhost:3000/sse",
+    "docker:n8n:up": "docker-compose -f ./docker-compose.yml up -d --build && sleep 4 && open http://localhost:5678",
+    "docker:n8n:down": "docker-compose -f ./docker-compose.yml down"
   },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
