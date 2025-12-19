@@ -31,8 +31,7 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('SERVER_PORT') || 3000;
-  if (process.env.NODE_ENV !== 'production') await app.listen(port);
-  return app.getHttpAdapter().getInstance();
+  await app.listen(port);
 }
 
-export default bootstrap();
+bootstrap();
