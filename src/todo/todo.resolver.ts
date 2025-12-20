@@ -1,5 +1,4 @@
-import { McpAuthGuard } from '@/guards/mcp-auth.guard';
-import { Resolver, Tool, UseGuards } from '@nestjs-mcp/server';
+import { Resolver, Tool } from '@nestjs-mcp/server';
 import { z } from 'zod';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
@@ -70,7 +69,7 @@ export class TodoResolver {
     };
   }
 
-  @UseGuards(McpAuthGuard)
+  // @UseGuards(McpAuthGuard)
   @Tool({
     name: 'todo_delete',
     description: 'Delete a TODO item',
