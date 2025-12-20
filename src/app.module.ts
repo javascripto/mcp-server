@@ -7,12 +7,12 @@ import { TodoModule } from './todo/todo.module';
 
 @Module({
   imports: [
-    TodoModule,
     ConfigModule.forRoot(),
     McpModule.forRoot({
       name: 'TodoMCP',
       version: '1.0.0',
     }),
+    TodoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
